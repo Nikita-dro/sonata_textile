@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from order.models import Cart, CartItem, Order
+from order.models import Cart, CartItem, City, Order
 
 
 class CartItemInline(admin.TabularInline):
@@ -15,4 +15,9 @@ class CartAdmin(admin.ModelAdmin):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
+    ...
+
+
+@admin.register(City)
+class CityAdmin(admin.ModelAdmin):
     ...

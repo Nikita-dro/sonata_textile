@@ -1,7 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from phonenumber_field.modelfields import PhoneNumberField
 
 from products.models import Product
 
@@ -41,20 +40,27 @@ class Order(models.Model):
         CASH = 0, "Оплата при доставці"
         CARD = 1, "Переказ на карту"
 
+    user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
     cart = models.ForeignKey("Cart", on_delete=models.CASCADE, verbose_name=_("Кошик"))
-    first_name = models.CharField(_("Ім'я"), max_length=150)
-    last_name = models.CharField(_("Прізвище"), max_length=150)
-    middle_name = models.CharField(_("По батькові"), max_length=150)
-    email = models.EmailField(_("Пошта"), max_length=150)
-    phone_number = PhoneNumberField(_("Номер телефону"), null=True, blank=True)
     delivery_method = models.PositiveSmallIntegerField(_("Спосіб доставки"), choices=DELIVERY_CHOICES.choices)
     payment_method = models.PositiveSmallIntegerField(
         _("Спосіб оплати"),
         choices=PAYMENT_CHOICES.choices,
         default=PAYMENT_CHOICES.CASH,
     )
-    city = models.CharField(_("Місто"), max_length=100)
+    city = models.ForeignKey(to="order.City", on_delete=models.CASCADE, verbose_name=_("Місто"))
     branch_address = models.CharField(_("Адреса відділення"), max_length=255)
 
     def __str__(self):
         return f"{self.pk} - {self.cart.user}"
+
+
+class City(models.Model):
+    class Meta:
+        verbose_name = _("Місто")
+        verbose_name_plural = _("Міста")
+
+    name = models.CharField(max_length=100, unique=True)
+
+    def __str__(self):
+        return f"{self.name}"

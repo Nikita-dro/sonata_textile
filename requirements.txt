@@ -1,6 +1,7 @@
 asgiref==3.7.2
 asttokens==2.4.1
 attrs==23.1.0
+Babel==2.13.1
 black==23.11.0
 build==0.10.0
 CacheControl==0.13.1
@@ -15,6 +16,7 @@ decorator==5.1.1
 distlib==0.3.7
 Django==4.2.7
 django-extensions==3.2.3
+django-money==3.4.1
 django-phonenumber-field==7.2.0
 dulwich==0.21.5
 exceptiongroup==1.2.0
@@ -51,6 +53,7 @@ poetry-plugin-export==1.5.0
 prompt-toolkit==3.0.41
 ptyprocess==0.7.0
 pure-eval==0.2.2
+py-moneyed==3.0
 pycodestyle==2.11.1
 pycparser==2.21
 pydot==1.4.2
