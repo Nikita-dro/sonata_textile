@@ -26,11 +26,11 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "phonenumber_field",
     "accounts",
     "core",
-    "bed_linen",
-    "blankets",
-    "towels",
+    "products",
+    "order",
 ]
 
 MIDDLEWARE = [
@@ -60,6 +60,8 @@ TEMPLATES = [
         },
     },
 ]
+
+AUTH_USER_MODEL = "accounts.Customer"
 
 WSGI_APPLICATION = "config.wsgi.application"
 
@@ -91,7 +93,6 @@ TIME_ZONE = "UTC"
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

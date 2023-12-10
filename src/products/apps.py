@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class BedLinenConfig(AppConfig):
+class ProductsConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
-    name = "bed_linen"
+    name = "products"
