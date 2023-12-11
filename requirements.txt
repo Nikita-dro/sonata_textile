@@ -1,6 +1,7 @@
 asgiref==3.7.2
 asttokens==2.4.1
 attrs==23.1.0
+Babel==2.13.1
 black==23.11.0
 build==0.10.0
 CacheControl==0.13.1
@@ -14,6 +15,9 @@ cryptography==41.0.2
 decorator==5.1.1
 distlib==0.3.7
 Django==4.2.7
+django-extensions==3.2.3
+django-money==3.4.1
+django-phonenumber-field==7.2.0
 dulwich==0.21.5
 exceptiongroup==1.2.0
 executing==2.0.1
@@ -38,6 +42,8 @@ packaging==23.1
 parso==0.8.3
 pathspec==0.11.2
 pexpect==4.8.0
+phonenumbers==8.13.26
+Pillow==10.1.0
 pipenv==2023.8.26
 pkginfo==1.9.6
 platformdirs==3.10.0
@@ -47,10 +53,13 @@ poetry-plugin-export==1.5.0
 prompt-toolkit==3.0.41
 ptyprocess==0.7.0
 pure-eval==0.2.2
+py-moneyed==3.0
 pycodestyle==2.11.1
 pycparser==2.21
+pydot==1.4.2
 pyflakes==3.1.0
 Pygments==2.17.2
+pyparsing==3.1.1
 pyproject_hooks==1.0.0
 pyrsistent==0.19.3
 rapidfuzz==2.15.1
