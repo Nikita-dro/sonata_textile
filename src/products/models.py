@@ -9,6 +9,7 @@ class Product(models.Model):
         verbose_name_plural = _("Товари")
 
     article = models.IntegerField(_("Артикул"), unique=True)
+    avatar = models.ImageField(_("Зображення"), upload_to="img/products", null=True, blank=True)
     name = models.CharField(_("Назва"), max_length=250)
     category = models.ForeignKey(to="products.Category", on_delete=models.CASCADE, verbose_name=_("Категорія"))
     brand = models.ForeignKey(
@@ -27,6 +28,7 @@ class Product(models.Model):
         verbose_name=_("Країна виробництва"),
     )
     availability = models.BooleanField(_("Наявність"), default=True)
+    hit_sale = models.BooleanField(_("Хіт продаж"), default=False)
     description = models.TextField(_("Опис"), null=True, blank=True)
 
     def __str__(self):
