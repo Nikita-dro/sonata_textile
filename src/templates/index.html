@@ -283,8 +283,10 @@
         <div class="nav-scroller py-1 mb-1" style="margin-top: 10px; margin-left: 300px">
             <nav class="nav d-flex">
                 <div class="nav-left">
-                    <img src="{% static 'img/logo.jpg' %}" width="70" height="40">
-                    <a class="p-2 link-secondary" style="text-decoration: none;" href="#">Про компанію</a>
+                    <img src="{% static 'img/textile_logo.jpg' %}" width="70" height="40"
+                         alt="">
+                    <a class="p-2 link-secondary" style="text-decoration: none;" href="{% url 'core:about_us' %}">Про
+                        компанію</a>
                     <a class="p-2 link-secondary" style="text-decoration: none;" href="#">Доставка й оплата</a>
                     <a class="p-2 link-secondary" style="text-decoration: none;" href="#">Контакти</a>
                     <a class="p-2 link-secondary" style="text-decoration: none;" href="#">Акції</a>
@@ -416,7 +418,7 @@
                            style="font-weight: normal; color: #808080; font-family: Amiri, Georgia, 'Times New Roman', serif;">
                             Магазин якісного товару, в якому працюють люди з великим досвідом у сфері домашнього
                             текстилю!</p>
-                        <a class="btn btn-outline-secondary" href="#">Детальніше</a>
+                        <a class="btn btn-outline-secondary" href="{% url 'core:about_us' %}">Детальніше</a>
                     </div>
                 </div>
                 <div class="product-device shadow-sm d-none d-md-block"></div>
@@ -431,7 +433,7 @@
                             <div class="mb-1 text-muted">працюємо з 1994 року</div>
                             <p class="card-text mb-auto" style="margin-top: 7px">Sonata Textile має широкий асортимент
                                 якісної продукції від провідних виробників!</p>
-                            <a href="#" class="stretched-link mb-3 text-success"
+                            <a href="{% url 'core:about_us' %}" class="stretched-link mb-3 text-success"
                                style="text-decoration: none; font-weight: bold;">Детальніше</a>
                         </div>
                         <div class="col-auto d-none d-lg-block">
@@ -477,11 +479,12 @@
                                          style="width: 100%; height: 270px; object-fit: cover;">
                                     <div class="card-body">
                                         <h5 class="card-title"
-                                            style="font-weight: bold;">{{ product.name.capitalize }}</h5>
+                                            style="font-weight: bold; font-size: 1.20rem;">{{ product.name }}</h5>
+                                        <p class="card-text" style="margin-bottom: 5px; font-style: italic;">
+                                            Артикул: {{ product.article }}</p>
                                         <p class="card-text" style="margin-bottom: 5px; font-style: italic;">
                                             Ціна: {{ product.price.amount }} грн</p>
-                                        <p class="card-text" style="font-style: italic;">Розмір: {{ product.size }}
-                                            грн</p>
+                                        <p class="card-text" style="font-style: italic;">Розмір: {{ product.size }}</p>
                                         {% if product.availability == True %}
                                             <div class="d-flex justify-content-center">
                                                 <a class="btn btn-outline-secondary" href="#">Додати в кошик</a>
@@ -533,7 +536,8 @@
             <div class="footer__col">
                 <h5 style="margin-right: 60px; margin-bottom: 15px;">Інформація</h5>
                 <ul style="margin-right: 60px;">
-                    <li><a href="" style="text-decoration: none; color: #e5e5e5">Sonata Textile</a></li>
+                    <li><a href="{% url 'core:about_us' %}" style="text-decoration: none; color: #e5e5e5">Sonata
+                        Textile</a></li>
                     <li><a href="" style="text-decoration: none; color: #e5e5e5">Конфіденційність</a></li>
                     <li><a href="" style="text-decoration: none; color: #e5e5e5">Доставка і оплата</a></li>
                     <li><a href="" style="text-decoration: none; color: #e5e5e5">TK-Domashniy tekstyl</a></li>
