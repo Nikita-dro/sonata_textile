@@ -11,7 +11,13 @@ class Product(models.Model):
     article = models.IntegerField(_("Артикул"), unique=True)
     avatar = models.ImageField(_("Зображення"), upload_to="img/products", null=True, blank=True)
     name = models.CharField(_("Назва"), max_length=250)
-    category = models.ForeignKey(to="products.Category", on_delete=models.CASCADE, verbose_name=_("Категорія"))
+    category = models.ForeignKey(
+        to="products.Category",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        verbose_name=_("Категорія"),
+    )
     brand = models.ForeignKey(
         to="products.Brand",
         on_delete=models.CASCADE,
@@ -26,6 +32,8 @@ class Product(models.Model):
         to="products.ProducingCountry",
         on_delete=models.CASCADE,
         verbose_name=_("Країна виробництва"),
+        null=True,
+        blank=True,
     )
     availability = models.BooleanField(_("Наявність"), default=True)
     hit_sale = models.BooleanField(_("Хіт продаж"), default=False)
