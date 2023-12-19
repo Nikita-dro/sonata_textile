@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     "phonenumber_field",
     "rest_framework",
     "djoser",
+    "drf_yasg",
     "accounts",
     "core",
     "products",

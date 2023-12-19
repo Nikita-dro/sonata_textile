@@ -1,5 +1,7 @@
 from django.urls import include, path
-from rest_framework import routers
+from drf_yasg import openapi
+from drf_yasg.views import get_schema_view
+from rest_framework import permissions, routers
 
 from api.views import (BrandViewSet, CategoryViewSet, CityViewSet,
                        CustomerCreate, CustomerDelete, CustomerListAll,
@@ -14,9 +16,23 @@ router.register("country", ProducingCountryViewSet)
 router.register("brand", BrandViewSet)
 router.register("city", CityViewSet)
 
+schema_view = get_schema_view(
+    openapi.Info(
+        title="Sonata Textile API",
+        default_version="v1.0",
+        description="API for passing questions",
+        terms_of_service="https://www.google.com/policies/terms/",
+        contact=openapi.Contact(email="admin@admin.com"),
+        license=openapi.License(name="BSD License"),
+    ),
+    public=True,
+    permission_classes=[permissions.AllowAny],
+)
+
 urlpatterns = [
     path("", include(router.urls)),
     path("auth/", include("djoser.urls.jwt")),
+    path("docs/", schema_view.with_ui("swagger", cache_timeout=0), name="swagger_docs"),
     path("customers/", CustomerListAll.as_view(), name="customers_all"),
     path("customers/<int:pk>/", CustomerListOne.as_view(), name="customer_one"),
     path("customers/create/", CustomerCreate.as_view(), name="customer_create"),
