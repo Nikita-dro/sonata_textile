@@ -3,7 +3,7 @@ from rest_framework.fields import CharField
 from rest_framework.relations import PrimaryKeyRelatedField
 from rest_framework.serializers import ModelSerializer
 
-from order.models import Cart, CartItem, City
+from order.models import City
 from products.models import Brand, Category, ProducingCountry, Product
 
 
@@ -33,9 +33,9 @@ class ProducingCountrySerializer(ModelSerializer):
 
 class ProductSerializer(ModelSerializer):
     price = CharField()
-    category = CategorySerializer()
-    brand = BrandSerializer()
-    producing_country = ProducingCountrySerializer()
+    category = CategorySerializer(read_only=True)
+    brand = BrandSerializer(read_only=True)
+    producing_country = ProducingCountrySerializer(read_only=True)
 
     class Meta:
         model = Product
@@ -66,59 +66,3 @@ class CitySerializer(ModelSerializer):
     class Meta:
         model = City
         fields = ("id", "name")
-
-
-# class CartItemSerializer(ModelSerializer):
-#     product = PrimaryKeyRelatedField(queryset=Product.objects.all())
-#     cart = PrimaryKeyRelatedField(queryset=Cart.objects.all())
-#
-#     class Meta:
-#         model = CartItem
-#         fields = "__all__"
-#
-#
-# class CartItemCreateUpdateSerializer(CartItemSerializer):
-#     cart = CartSerializer
-#
-#     class Meta:
-#         model = CartItem
-#         fields = "__all__"
-
-
-class CartItemSerializer(ModelSerializer):
-    product = ProductSerializer()
-
-    class Meta:
-        model = CartItem
-        fields = ("id", "cart", "product", "quantity")
-
-
-class CartItemCreateUpdateSerializer(CartItemSerializer):
-    product = PrimaryKeyRelatedField(queryset=Product.objects.all())
-    cart = PrimaryKeyRelatedField(queryset=Cart.objects.all())
-
-
-class CartSerializer(ModelSerializer):
-    user = CustomerSerializer()
-    items = CartItemSerializer(many=True)
-
-    class Meta:
-        model = Cart
-        fields = ("id", "user", "items")
-
-
-class CartCreateUpdateSerializer(CartSerializer):
-    user = PrimaryKeyRelatedField(queryset=get_user_model().objects.all())
-    items = PrimaryKeyRelatedField(queryset=CartItem.objects.all())
-    # items = PrimaryKeyRelatedField(queryset=Product.objects.all())
-
-
-# class CartItemSerializer(ModelSerializer):
-#     product = ProductSerializer(many=True, read_only=True)
-#     cart = CartSerializer(many=True, read_only=True)
-#
-#     # cart = PrimaryKeyRelatedField(queryset=Cart.objects.all())
-#
-#     class Meta:
-#         model = CartItem
-#         fields = "__all__"

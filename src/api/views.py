@@ -1,16 +1,23 @@
 from django.contrib.auth import get_user_model
-from rest_framework.generics import (CreateAPIView, DestroyAPIView,
-                                     ListAPIView, RetrieveAPIView,
-                                     UpdateAPIView)
+from rest_framework.generics import (
+    CreateAPIView,
+    DestroyAPIView,
+    ListAPIView,
+    RetrieveAPIView,
+    UpdateAPIView,
+)
 from rest_framework.viewsets import ModelViewSet
 
-from api.serializers import (BrandSerializer, CartCreateUpdateSerializer,
-                             CartItemCreateUpdateSerializer,
-                             CartItemSerializer, CartSerializer,
-                             CategorySerializer, CitySerializer,
-                             CustomerSerializer, ProducingCountrySerializer,
-                             ProductCreateUpdateSerializer, ProductSerializer)
-from order.models import Cart, CartItem, City
+from api.serializers import (
+    BrandSerializer,
+    CategorySerializer,
+    CitySerializer,
+    CustomerSerializer,
+    ProducingCountrySerializer,
+    ProductCreateUpdateSerializer,
+    ProductSerializer,
+)
+from order.models import City
 from products.models import Brand, Category, ProducingCountry, Product
 
 
@@ -82,63 +89,3 @@ class BrandViewSet(ModelViewSet):
 class CityViewSet(ModelViewSet):
     queryset = City.objects.all()
     serializer_class = CitySerializer
-
-
-# class CartViewSet(ModelViewSet):
-#     queryset = Cart.objects.all()
-#     serializer_class = CartSerializer
-#
-#
-# class CartItemViewSet(ModelViewSet):
-#     queryset = CartItem.objects.all()
-#     serializer_class = CartItemSerializer
-
-
-class CartListAll(ListAPIView):
-    queryset = Cart.objects.all()
-    serializer_class = CartSerializer
-
-
-class CartListOne(RetrieveAPIView):
-    queryset = Cart.objects.all()
-    serializer_class = CartSerializer
-
-
-class CartCreate(CreateAPIView):
-    queryset = Cart.objects.all()
-    serializer_class = CartCreateUpdateSerializer
-
-
-class CartUpdate(UpdateAPIView):
-    queryset = Cart.objects.all()
-    serializer_class = CartCreateUpdateSerializer
-
-
-class CartDelete(DestroyAPIView):
-    queryset = Cart.objects.all()
-    serializer_class = CartSerializer
-
-
-class CartItemListAll(ListAPIView):
-    queryset = CartItem.objects.all()
-    serializer_class = CartItemSerializer
-
-
-class CartItemListOne(RetrieveAPIView):
-    queryset = CartItem.objects.all()
-    serializer_class = CartItemSerializer
-
-
-class CartItemCreate(CreateAPIView):
-    queryset = CartItem.objects.all()
-    serializer_class = CartItemCreateUpdateSerializer
-
-
-class CartItemUpdate(UpdateAPIView):
-    queryset = CartItem.objects.all()
-    serializer_class = CartItemCreateUpdateSerializer
-
-
-class CartItemDelete(DestroyAPIView):
-    queryset = CartItem.objects.all()
-    serializer_class = CartItemSerializer
