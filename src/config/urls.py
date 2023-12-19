@@ -24,6 +24,8 @@ from core.views import IndexView
 urlpatterns = [
     path("", IndexView.as_view(), name="index"),
     path("admin/", admin.site.urls),
+    path("api-auth/", include("rest_framework.urls")),
+    path("api/", include("api.urls")),
     path("core/", include("core.urls")),
 ]
 
