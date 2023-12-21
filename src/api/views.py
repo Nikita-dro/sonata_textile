@@ -2,12 +2,14 @@ from django.contrib.auth import get_user_model
 from rest_framework.generics import (CreateAPIView, DestroyAPIView,
                                      ListAPIView, RetrieveAPIView,
                                      UpdateAPIView)
+from rest_framework.permissions import AllowAny
 from rest_framework.viewsets import ModelViewSet
 
 from api.serializers import (BrandSerializer, CategorySerializer,
                              CitySerializer, CustomerSerializer,
                              ProducingCountrySerializer,
                              ProductCreateUpdateSerializer, ProductSerializer)
+from core.permissions import IsSuperUser
 from order.models import City
 from products.models import Brand, Category, ProducingCountry, Product
 
@@ -28,6 +30,7 @@ class CustomerDelete(DestroyAPIView):
 
 
 class CustomerListAll(ListAPIView):
+    permission_classes = [IsSuperUser]
     queryset = get_user_model().objects.all()
     serializer_class = CustomerSerializer
 
@@ -38,6 +41,7 @@ class CustomerListOne(RetrieveAPIView):
 
 
 class ProductListAll(ListAPIView):
+    permission_classes = [AllowAny]
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
