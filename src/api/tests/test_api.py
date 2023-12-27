@@ -79,7 +79,7 @@ class TestAPI(TestCase):
                 "brand": {"id": 1, "name": "TestBrand"},
                 "price": "UAH500.00",
                 "size": "30x30",
-                "material": "TestMaterial",
+                "material": 1,
                 "producing_country": {"id": 1, "name": "TestProducingCountry"},
                 "availability": True,
                 "hit_sale": False,

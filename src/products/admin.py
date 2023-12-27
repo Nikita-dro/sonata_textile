@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from products.models import Brand, Category, ProducingCountry, Product
+from products.models import (Brand, Category, Material, ProducingCountry,
+                             Product)
 
 
 @admin.register(Product)
@@ -20,4 +21,9 @@ class ProducingCountryAdmin(admin.ModelAdmin):
 
 @admin.register(Brand)
 class BrandAdmin(admin.ModelAdmin):
+    ...
+
+
+@admin.register(Material)
+class MaterialAdmin(admin.ModelAdmin):
     ...

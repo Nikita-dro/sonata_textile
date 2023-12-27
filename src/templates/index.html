@@ -280,17 +280,21 @@
 
 <div class="container">
     <header class="blog-header py-1">
-        <div class="nav-scroller py-1 mb-1" style="margin-top: 10px; margin-left: 300px">
+        <div class="nav-scroller py-1 mb-1" style="margin-top: 10px; margin-left: 270px">
             <nav class="nav d-flex">
                 <div class="nav-left">
                     <img src="{% static 'img/textile_logo.jpg' %}" width="70" height="40"
                          alt="">
+                    <a class="p-2 link-secondary" style="text-decoration: none;"
+                       href="{% url 'core:index' %}">Головна</a>
                     <a class="p-2 link-secondary" style="text-decoration: none;" href="{% url 'core:about_us' %}">Про
                         компанію</a>
-                    <a class="p-2 link-secondary" style="text-decoration: none;" href="#">Доставка й оплата</a>
+                    <a class="p-2 link-secondary" style="text-decoration: none;" href="{% url 'core:delivery' %}">Доставка
+                        й оплата</a>
                     <a class="p-2 link-secondary" style="text-decoration: none;" href="#">Контакти</a>
                     <a class="p-2 link-secondary" style="text-decoration: none;" href="#">Акції</a>
-                    <a class="p-2 link-secondary" style="text-decoration: none;" href="#">Наші партнери</a>
+                    <a class="p-2 link-secondary" style="text-decoration: none;" href="#">Наші
+                        партнери</a>
                 </div>
                 <div class="nav-right ml-auto" style="margin-top: 5px">
                     <ul class="socials d-flex align-items-center">
@@ -336,7 +340,7 @@
         <div class="row flex-nowrap justify-content-between align-items-center d-flex align-items-center">
             <div class="col-md-4 pt-1">
                 <div class="dropdown">
-                    <a href="/categories" class="nav-btn openNav">
+                    <a href="{% url 'core:all_categories' %}" class="nav-btn openNav">
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"
                              stroke="currentColor"
                              stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="mx-1" role="img"
@@ -355,22 +359,19 @@
                     </a>
                     <div class="dropdown-content" style="font-family: Amiri, Georgia, 'Times New Roman', serif;">
                         {% for category in categories %}
-                            <a href="#">{{ category.name }}</a>
+                            <a href="{% url 'products:category_products' category.id %}">{{ category.name }}</a>
                         {% endfor %}
                     </div>
                 </div>
             </div>
             <div class="col-md-4 d-flex justify-content-center align-items-center">
-                <form name="search" method="post" action="/api/search/catalog/submit?isMobile=0"
-                      class="search search_desk"
-                      data-autocomplete-url="/api/search/catalog" autocomplete="off">
+                <form class="search search_desk" method="get" action="{% url 'products:search_product' %}">
                     <div class="form-item">
-                        <input type="search" id="search_term" name="search[term]" required="required"
-                               placeholder="Я шукаю..."
-                               class="fontA" autocomplete="off" autocorrect="off" autocapitalize="none">
+                        <input class="fontA" id="search_term" type="search" placeholder="Я шукаю..." aria-label="Search"
+                               name="search_text" autocomplete="off" autocorrect="off" autocapitalize="none">
                     </div>
                     <div class="form-action">
-                        <button type="submit" class="submit">Пошук</button>
+                        <button class="submit" type="submit">Пошук</button>
                     </div>
                 </form>
             </div>
@@ -474,29 +475,36 @@
                                 {% endif %}
 
                             <div class="col-md-3 mb-3">
-                                <div class="card" style="width: 93%;">
-                                    <img src="{{ product.avatar.url }}" class="card-img-top" alt="dfgdfg"
-                                         style="width: 100%; height: 270px; object-fit: cover;">
-                                    <div class="card-body">
-                                        <h5 class="card-title"
-                                            style="font-weight: bold; font-size: 1.20rem;">{{ product.name }}</h5>
-                                        <p class="card-text" style="margin-bottom: 5px; font-style: italic;">
-                                            Артикул: {{ product.article }}</p>
-                                        <p class="card-text" style="margin-bottom: 5px; font-style: italic;">
-                                            Ціна: {{ product.price.amount }} грн</p>
-                                        <p class="card-text" style="font-style: italic;">Розмір: {{ product.size }}</p>
-                                        {% if product.availability == True %}
-                                            <div class="d-flex justify-content-center">
-                                                <a class="btn btn-outline-secondary" href="#">Додати в кошик</a>
-                                            </div>
-                                        {% else %}
+                                <a href="{% url 'products:product_info' product.id %}" style="text-decoration: none;">
+                                    <div class="card" style="width: 93%;">
+                                        <img src="{{ product.avatar.url }}" class="card-img-top" alt="dfgdfg"
+                                             style="width: 100%; height: 270px; object-fit: cover;">
+                                        <div class="card-body">
+                                            <h5 class="card-title"
+                                                style="font-weight: bold; font-size: 1.20rem; color: black;">{{ product.name }}</h5>
                                             <p class="card-text"
-                                               style="font-weight: bold; color: red; text-align: center; margin-bottom: 13px;">
-                                                Немає в
-                                                наявності</p>
-                                        {% endif %}
+                                               style="margin-bottom: 5px; font-style: italic; color: black;">
+                                                Артикул: {{ product.article }}</p>
+                                            <p class="card-text"
+                                               style="margin-bottom: 5px; font-style: italic; color: black;">
+                                                Ціна: {{ product.price.amount }} грн</p>
+                                            <p class="card-text" style="font-style: italic; color: black;">
+                                                Розмір: {{ product.size }}</p>
+                                            {% if product.availability == True %}
+                                                <div class="d-flex justify-content-center">
+                                                    <a class="btn btn-outline-secondary" style="margin-top: 10px;"
+                                                       href="#">Додати
+                                                        в кошик</a>
+                                                </div>
+                                            {% else %}
+                                                <p class="card-text"
+                                                   style="font-weight: bold; color: red; text-align: center; margin-bottom: 13px;">
+                                                    Немає в
+                                                    наявності</p>
+                                            {% endif %}
+                                        </div>
                                     </div>
-                                </div>
+                                </a>
                             </div>
 
                             {% if forloop.counter|divisibleby:4 %}
@@ -539,8 +547,8 @@
                     <li><a href="{% url 'core:about_us' %}" style="text-decoration: none; color: #e5e5e5">Sonata
                         Textile</a></li>
                     <li><a href="" style="text-decoration: none; color: #e5e5e5">Конфіденційність</a></li>
-                    <li><a href="" style="text-decoration: none; color: #e5e5e5">Доставка і оплата</a></li>
-                    <li><a href="" style="text-decoration: none; color: #e5e5e5">TK-Domashniy tekstyl</a></li>
+                    <li><a href="{% url 'core:delivery' %}" style="text-decoration: none; color: #e5e5e5">Доставка і
+                        оплата</a></li>
                     <li><a href="" style="text-decoration: none; color: #e5e5e5">Наші партнери</a></li>
                     <li><a href="" style="text-decoration: none; color: #e5e5e5">Акції</a></li>
                 </ul>
