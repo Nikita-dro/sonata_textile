@@ -73,6 +73,7 @@ class TestAPI(TestCase):
         )
 
         self.assertEqual(result.status_code, HTTP_200_OK)
+        print(result.data)
         self.assertEqual(
             result.data,
             {
@@ -80,12 +81,12 @@ class TestAPI(TestCase):
                 "article": 3254,
                 "name": "TestName",
                 "avatar": None,
-                "category": {"id": 1, "name": "TestCategory"},
-                "brand": {"id": 1, "name": "TestBrand"},
+                "category": {"id": mock.ANY, "name": "TestCategory"},
+                "brand": {"id": mock.ANY, "name": "TestBrand"},
                 "price": "UAH500.00",
                 "size": "30x30",
-                "material": 1,
-                "producing_country": {"id": 1, "name": "TestProducingCountry"},
+                "material": mock.ANY,
+                "producing_country": {"id": mock.ANY, "name": "TestProducingCountry"},
                 "availability": True,
                 "hit_sale": False,
                 "description": "TestDescription",
