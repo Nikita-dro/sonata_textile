@@ -73,7 +73,6 @@ class TestAPI(TestCase):
         )
 
         self.assertEqual(result.status_code, HTTP_200_OK)
-        print(result.data)
         self.assertEqual(
             result.data,
             {
