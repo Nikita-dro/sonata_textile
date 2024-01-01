@@ -1,11 +1,12 @@
-from products.models import Brand, Category, ProducingCountry, Product
+from products.models import (Brand, Category, Material, ProducingCountry,
+                             Product)
 
 
 def sample_product(article: int, name: str, size: str, price: float, **params) -> Product:
     default = {
         "category": Category.objects.create(name="TestCategory"),
         "brand": Brand.objects.create(name="TestBrand"),
-        "material": "TestMaterial",
+        "material": Material.objects.create(name="TestMaterial"),
         "producing_country": ProducingCountry.objects.create(name="TestProducingCountry"),
         "description": "TestDescription",
     }

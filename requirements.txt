@@ -65,6 +65,8 @@ poetry==1.6.1
 poetry-core==1.7.0
 poetry-plugin-export==1.5.0
 prompt-toolkit==3.0.41
+psycopg==3.1.16
+psycopg2-binary==2.9.9
 ptyprocess==0.7.0
 pure-eval==0.2.2
 py-moneyed==3.0
