@@ -29,6 +29,9 @@ INSTALLED_APPS = [
     "phonenumber_field",
     "rest_framework",
     "djoser",
+    "crispy_forms",
+    "social_django",
+    "crispy_bootstrap5",
     "drf_yasg",
     "accounts",
     "core",
@@ -45,9 +48,20 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "social_django.middleware.SocialAuthExceptionMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
+
+AUTHENTICATION_BACKENDS = (
+    "django.contrib.auth.backends.ModelBackend",
+    "social_core.backends.google.GoogleOAuth2",
+)
+
+SOCIAL_AUTH_URL_NAMESPACE = "social"
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = "404536193202-90t0ft5mc35ljvii5vhhfo6vu59ntoq3.apps.googleusercontent.com"
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = "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"
 
 TEMPLATES = [
     {
@@ -60,6 +74,8 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "social_django.context_processors.backends",
+                "social_django.context_processors.login_redirect",
             ],
         },
     },
@@ -92,6 +108,10 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
+LOGIN_REDIRECT_URL = "index"
+LOGOUT_REDIRECT_URL = "core:login"
+LOGIN_URL = "core:login"
+
 TIME_ZONE = "UTC"
 
 USE_I18N = True
@@ -121,3 +141,7 @@ DJOSER = {
     "PASSWORD_RESET_SHOW_EMAIL_NOT_FOUND": True,
     "PASSWORD_RESET_CONFIRM_URL": "auth/password-reset/{uid}/{token}",
 }
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+
+CRISPY_TEMPLATE_PACK = "bootstrap5"
