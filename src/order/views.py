@@ -5,34 +5,36 @@ from order.models import Cart, CartItem
 from products.models import Product
 
 
-# Create your views here.
 def add_to_cart(request):
-    # product = get_object_or_404(Product, pk=product_id)
-    #
-    # cart, created = Cart.objects.get_or_create(user=request.user)
-    #
-    # cart_item, item_created = CartItem.objects.get_or_create(cart=cart, product=product)
-    #
-    # cart_item.quantity += 1
-    # cart_item.save()
-    # print("dfkj")
-    # data = {
-    #     "product_name": product.name,
-    #     "quantity": cart_item.quantity,
-    # }
-    # return JsonResponse(data)
-    if request.method == "POST":
-        product_id = request.POST.get("product_id")
-        product = get_object_or_404(Product, pk=product_id)
+    return_dict = dict()
+    data = request.POST
+    product = get_object_or_404(Product, pk=data.get("product_id"))
+    cart, created = Cart.objects.get_or_create(user=request.user)
+    cart_item, item_created = CartItem.objects.get_or_create(cart=cart, product=product)
 
-        cart, created = Cart.objects.get_or_create(user=request.user)
-
-        cart_item, item_created = CartItem.objects.get_or_create(cart=cart, product=product)
+    if not item_created:
         cart_item.quantity += 1
-        cart_item.save()
-        # Добавление товара в корзину (замените на свой код)
-        # Предположим, что у вас есть модель CartItem с полями user, product и quantity
-        # cart_item = CartItem.objects.create(user=request.user, product_id=product_id, quantity=1)
+    else:
+        cart_item.quantity = 1
 
-        return JsonResponse({"message": "Товар успешно добавлен в корзину!"})
-    return JsonResponse({"message": "Метод не разрешен"}, status=405)
+    cart_item.save()
+    products_number = CartItem.objects.filter(cart=cart)
+    total = 0
+    total_price = 0
+    return_dict["products_list"] = list()
+
+    for cart_item_obj in products_number:
+        total += cart_item_obj.quantity
+        total_price += cart_item_obj.quantity * cart_item_obj.product.price.amount
+        product_dict = dict()
+        product_dict["id_product"] = cart_item_obj.product.id
+        product_dict["image_product"] = cart_item_obj.product.avatar.url
+        product_dict["article"] = cart_item_obj.product.article
+        product_dict["name_product"] = cart_item_obj.product.name
+        product_dict["price_product"] = cart_item_obj.product.price.amount
+        product_dict["quantity"] = cart_item_obj.quantity
+        return_dict["products_list"].append(product_dict)
+
+    return_dict["products_number"] = total
+    return_dict["products_total_price"] = total_price
+    return JsonResponse(return_dict)
