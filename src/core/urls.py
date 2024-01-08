@@ -1,6 +1,7 @@
 from django.urls import path
 
-from core.views import AboutUsView, AllCategoriesView, DeliveryView, IndexView
+from core.views import (AboutUsView, AllCategoriesView, DeliveryView,
+                        IndexView, UserLogin, UserLogout)
 
 app_name = "core"
 urlpatterns = [
@@ -8,4 +9,6 @@ urlpatterns = [
     path("about_us/", AboutUsView.as_view(), name="about_us"),
     path("delivery/", DeliveryView.as_view(), name="delivery"),
     path("categories/", AllCategoriesView.as_view(), name="all_categories"),
+    path("login/", UserLogin.as_view(), name="login"),
+    path("logout/", UserLogout.as_view(), name="logout"),
 ]

@@ -80,10 +80,29 @@
                 </p>
             </ul>
             {% if product.availability == True %}
-                <div class="d-flex justify-content-center">
-                    <a class="btn btn-outline-secondary" style="margin-top: 10px; margin-right: 275px;" href="#">Додати
-                        в кошик</a>
-                </div>
+                {% if user.is_authenticated %}
+                    <div class="d-flex justify-content-center" style="position: relative;">
+                        <a id="addToCartBtn"
+                           class="btn btn-outline-secondary add-to-cart-btn"
+                           data-product_id="{{ product.id }}"
+                           data-name="{{ product.name }}"
+                           data-price="{{ product.price.amount }}"
+                           style="margin-top: 10px;"
+                        >Додати
+                            в кошик</a>
+                        <div id="addedText" class="green-line"
+                             style="position: absolute; top: 10px; left: 124px; display: none;">Додано в кошик
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="d-flex justify-content-center">
+                        <a href="{% url 'core:login' %}"
+                           class="btn btn-outline-secondary "
+                           style="margin-top: 10px;"
+                        >Додати
+                            в кошик</a>
+                    </div>
+                {% endif %}
             {% endif %}
         </div>
         <div class="delivery"><p><strong>🇺🇦 Sonata Textile</strong> вже більше 25 років радує вас якісним
@@ -160,11 +179,29 @@
                                     <p class="card-text" style="font-style: italic; color: black;">
                                         Розмір: {{ product.size }}</p>
                                     {% if product.availability == True %}
-                                        <div class="d-flex justify-content-center">
-                                            <a class="btn btn-outline-secondary" style="margin-top: 10px;"
-                                               href="#">Додати
-                                                в кошик</a>
-                                        </div>
+                                        {% if user.is_authenticated %}
+                                            <div class="d-flex justify-content-center">
+                                                <a id="addToCartBtn"
+                                                   class="btn btn-outline-secondary add-to-cart-btn"
+                                                   data-product_id="{{ product.id }}"
+                                                   data-name="{{ product.name }}"
+                                                   data-price="{{ product.price.amount }}"
+                                                   style="margin-top: 10px;"
+                                                >Додати
+                                                    в кошик</a>
+                                                <div id="addedText" class="green-line">
+                                                    Додано в кошик
+                                                </div>
+                                            </div>
+                                        {% else %}
+                                            <div class="d-flex justify-content-center">
+                                                <a href="{% url 'core:login' %}"
+                                                   class="btn btn-outline-secondary "
+                                                   style="margin-top: 10px;"
+                                                >Додати
+                                                    в кошик</a>
+                                            </div>
+                                        {% endif %}
                                     {% else %}
                                         <p class="card-text"
                                            style="font-weight: bold; color: red; text-align: center; margin-bottom: 13px;">
@@ -219,5 +256,12 @@
 
             link.classList.add('active');
         }
+
+        $(document).ready(function () {
+            $('#addToCartBtn').click(function () {
+                $('#addedText').show().fadeOut(2000);
+            });
+        });
+
     </script>
 {% endblock content %}
