@@ -28,14 +28,14 @@ if os.environ.get("GITHUB_WORKFLOW"):
     }
 else:
     DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": "drobot_db",
-            "USER": "admin2",
-            "PASSWORD": "admin43",
-            "HOST": "localhost",
-            "PORT": 5432,
-        },
+        # "default": {
+        #     "ENGINE": "django.db.backends.postgresql",
+        #     "NAME": "drobot_db",
+        #     "USER": "admin2",
+        #     "PASSWORD": "admin43",
+        #     "HOST": "localhost",
+        #     "PORT": 5432,
+        # },
         # "default": {
         #     "ENGINE": "django.db.backends.postgresql",
         #     "NAME": os.environ.get("POSTGRES_DB"),
@@ -44,10 +44,10 @@ else:
         #     "HOST": os.environ.get("POSTGRES_HOST"),
         #     "PORT": os.environ.get("POSTGRES_PORT"),
         # },
-        # "default": {
-        #     "ENGINE": "django.db.backends.sqlite3",
-        #     "NAME": BASE_DIR / "db.sqlite3",  # NOQA
-        # },
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",  # NOQA
+        },
     }
 
 # Static files (CSS, JavaScript, Images)

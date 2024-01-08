@@ -399,7 +399,7 @@
 
 <div class="container">
     <header class="blog-header py-1">
-        <div class="nav-scroller py-1 mb-1" style="margin-top: 10px; margin-left: 270px">
+        <div class="nav-scroller py-1 mb-1" style="margin-top: 10px; margin-left: 260px">
             <nav class="nav d-flex">
                 <div class="nav-left">
                     <img src="{% static 'img/textile_logo.jpg' %}" width="70" height="40"
@@ -411,7 +411,6 @@
                     <a class="p-2 link-secondary" style="text-decoration: none;" href="{% url 'core:delivery' %}">Доставка
                         й оплата</a>
                     <a class="p-2 link-secondary" style="text-decoration: none;" href="#">Контакти</a>
-                    <a class="p-2 link-secondary" style="text-decoration: none;" href="#">Акції</a>
                     <a class="p-2 link-secondary" style="text-decoration: none;" href="#">Наші
                         партнери</a>
                 </div>
@@ -509,7 +508,7 @@
                     </a>
                 </div>
                 <div class="basket-container">
-                    <a href="" class="cart-link">
+                    <a href="{% url 'order:show_basket' %}" class="cart-link">
                         <svg width="22" height="22" viewBox="0 0 15 15" fill="none"
                              xmlns="http://www.w3.org/2000/svg"
                              stroke="currentColor"
@@ -739,7 +738,6 @@
                     <li><a href="{% url 'core:delivery' %}" style="text-decoration: none; color: #e5e5e5">Доставка і
                         оплата</a></li>
                     <li><a href="" style="text-decoration: none; color: #e5e5e5">Наші партнери</a></li>
-                    <li><a href="" style="text-decoration: none; color: #e5e5e5">Акції</a></li>
                 </ul>
             </div>
 
@@ -848,6 +846,7 @@
 
             var data = {};
             data.product_id = product_id;
+            data.basket = 'true';
             var csrf_token = $("[name='csrfmiddlewaretoken']").val();
             data["csrfmiddlewaretoken"] = csrf_token;
             var url = '{% url 'order:add_to_cart' %}';
