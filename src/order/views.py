@@ -11,16 +11,14 @@ def add_to_cart(request):
     data = request.POST
     product = get_object_or_404(Product, pk=data.get("product_id"))
     if data.get("update_quantity") and data.get("update_quantity") != "":
-        quantity_action = data.get("update_action")
+        quantity_action = data.get("update_quantity")
         cart = Cart.objects.get(user=request.user)
         cart_item = CartItem.objects.get(cart=cart, product=product)
         if quantity_action == "true":
             cart_item.quantity += 1
-        else:
+        elif quantity_action == "false":
             if cart_item.quantity > 1:
                 cart_item.quantity -= 1
-            else:
-                cart_item.delete()
         cart_item.save()
     elif data.get("basket") == "true":
         cart, created = Cart.objects.get_or_create(user=request.user)

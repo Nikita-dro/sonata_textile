@@ -520,41 +520,43 @@
                         </svg>
                         <span>Кошик</span>&nbsp;<span id="products_total_number">({{ total }})</span>
                     </a>
-                    <div class="basket-items d-none">
-                        <ul class="">
-                            {% for product_basket in products_number %}
-                                <div class="basket_popup__item">
-                                    <img class="basket_popup__img" src="{{ product_basket.product.avatar.url }}">
-                                    <div class="basket_popup__info">
-                                        <div class="basket__col">
-                                            <div class="basket__top">
-                                                <div class="basket_popup__art">Артикул:&nbsp;<span>{{ product_basket.product.article }}</span></div>
-                                                <div class="goods__title">
-                                                    <a href="{% url 'products:product_info' product_basket.product.id %}"
-                                   style="text-decoration: none; color: black">{{ product_basket.product.name }}</a>
+                    {% if total != 0 %}
+                        <div class="basket-items d-none">
+                            <ul class="">
+                                {% for product_basket in products_number %}
+                                    <div class="basket_popup__item">
+                                        <img class="basket_popup__img" src="{{ product_basket.product.avatar.url }}">
+                                        <div class="basket_popup__info">
+                                            <div class="basket__col">
+                                                <div class="basket__top">
+                                                    <div class="basket_popup__art">Артикул:&nbsp;<span>{{ product_basket.product.article }}</span></div>
+                                                    <div class="goods__title">
+                                                        <a href="{% url 'products:product_info' product_basket.product.id %}"
+                                       style="text-decoration: none; color: black">{{ product_basket.product.name }}</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="basket__col">
+                                                <div class="basket_popup__quantity">
+                                                    Кількість:&nbsp;<span>{{ product_basket.quantity }}</span>
+                                                </div>
+                                            </div>
+                                            <div class="basket__col">
+                                                <div class="basket_popup__sum">{{ product_basket.product.price.amount }}&nbsp;<span>грн</span>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="basket__col">
-                                            <div class="basket_popup__quantity">
-                                                Кількість:&nbsp;<span>{{ product_basket.quantity }}</span>
-                                            </div>
-                                        </div>
-                                        <div class="basket__col">
-                                            <div class="basket_popup__sum">{{ product_basket.product.price.amount }}&nbsp;<span>грн</span>
-                                            </div>
-                                        </div>
                                     </div>
+                                {% endfor %}
+                                <div class="summary-bar">
+                                    <div class="total-amount" style="text-align: center;">
+                                        Всього: <span id="totalAmount">{{ total_price }}</span> грн
+                                    </div>
+                                    <button class="order-button" style="margin-left: 70px; margin-top: 5px;">Оформити замовлення</button>
                                 </div>
-                            {% endfor %}
-                            <div class="summary-bar">
-                                <div class="total-amount" style="text-align: center;">
-                                    Всього: <span id="totalAmount">{{ total_price }}</span> грн
-                                </div>
-                                <button class="order-button" style="margin-left: 70px; margin-top: 5px;">Оформити замовлення</button>
-                            </div>
-                        </ul>
-                    </div>
+                            </ul>
+                        </div>
+                    {% endif %}
                 </div>
             {% else %}
                 <div class="col-md-4 d-flex justify-content-end align-items-center">

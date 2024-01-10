@@ -30,9 +30,9 @@ else:
     DATABASES = {
         # "default": {
         #     "ENGINE": "django.db.backends.postgresql",
-        #     "NAME": "drobot_db",
-        #     "USER": "admin2",
-        #     "PASSWORD": "admin43",
+        #     "NAME": "drobot_sonata_textile",
+        #     "USER": "mykyta",
+        #     "PASSWORD": "admin2323",
         #     "HOST": "localhost",
         #     "PORT": 5432,
         # },
