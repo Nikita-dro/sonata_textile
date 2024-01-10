@@ -1,8 +1,8 @@
-FROM python:3.10-rc-slim
+FROM python:3.11-rc-slim
 
-RUN apt update && mkdir "/sonata_textile_shop"
+RUN apt update && mkdir "/sonata_textile"
 
-WORKDIR /sonata_textile_shop
+WORKDIR /sonata_textile
 
 COPY ./src ./src
 COPY ./commands ./commands
