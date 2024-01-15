@@ -1,6 +1,7 @@
 from django.urls import path
 
-from accounts.views import ActivateUserView, UserRegistration
+from accounts.views import (ActivateUserView, UserRegistration,
+                            customer_generate)
 
 app_name = "accounts"
 urlpatterns = [
@@ -10,4 +11,5 @@ urlpatterns = [
         ActivateUserView.as_view(),
         name="user",
     ),
+    path("generate/<int:number>/", customer_generate, name="customer_generate"),
 ]

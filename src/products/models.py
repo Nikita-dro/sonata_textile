@@ -1,6 +1,9 @@
+from random import choice, randint
+
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from djmoney.models.fields import MoneyField
+from faker import Faker
 
 
 class Product(models.Model):
@@ -48,6 +51,38 @@ class Product(models.Model):
     def __str__(self):
         return f"{self.name} ({self.article})"
 
+    @classmethod
+    def generate_instances(cls, count):
+        faker = Faker()
+        categories = Category.objects.all()
+        brands = Brand.objects.all()
+        materials = Material.objects.all()
+        producing_countries = ProducingCountry.objects.all()
+
+        for i in range(count):
+            unique_article_generated = False
+            while not unique_article_generated:
+                article = randint(1000, 9999)
+                try:
+                    Product.objects.get(article=article)
+                except Product.DoesNotExist:
+                    unique_article_generated = True
+
+            Product.objects.create(
+                article=article,
+                name=faker.word(),
+                category=choice(categories),
+                brand=choice(brands),
+                price=faker.random_int(min=10, max=1000),
+                size=faker.random_element(elements=("S", "M", "L", "XL")),
+                material=choice(materials),
+                producing_country=choice(producing_countries),
+                availability=faker.boolean(),
+                hit_sale=faker.boolean(),
+                description=faker.text(),
+                avatar=Faker.Avatar.image_url(),
+            )
+
 
 class Category(models.Model):
     class Meta:
@@ -60,6 +95,12 @@ class Category(models.Model):
     def __str__(self):
         return f"{self.name}"
 
+    @classmethod
+    def generate_instances(cls, count):
+        faker = Faker()
+        for i in range(count):
+            Category.objects.create(name=faker.word(), image=Faker.Avatar.image_url())
+
 
 class ProducingCountry(models.Model):
     class Meta:
@@ -70,6 +111,14 @@ class ProducingCountry(models.Model):
 
     def __str__(self):
         return f"{self.name}"
+
+    @classmethod
+    def generate_instances(cls, count):
+        faker = Faker()
+        for i in range(count):
+            ProducingCountry.objects.create(
+                name=faker.word(),
+            )
 
 
 class Brand(models.Model):
@@ -82,6 +131,14 @@ class Brand(models.Model):
     def __str__(self):
         return f"{self.name}"
 
+    @classmethod
+    def generate_instances(cls, count):
+        faker = Faker()
+        for i in range(count):
+            Brand.objects.create(
+                name=faker.word(),
+            )
+
 
 class Material(models.Model):
     class Meta:
@@ -92,3 +149,11 @@ class Material(models.Model):
 
     def __str__(self):
         return f"{self.name}"
+
+    @classmethod
+    def generate_instances(cls, count):
+        faker = Faker()
+        for i in range(count):
+            Material.objects.create(
+                name=faker.word(),
+            )
