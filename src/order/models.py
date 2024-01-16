@@ -1,3 +1,5 @@
+from random import choice, randint
+
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -28,6 +30,27 @@ class CartItem(models.Model):
 
     def __str__(self):
         return f"{self.cart} - {self.product}"
+
+    @classmethod
+    def generate_instances(cls):
+        users = get_user_model().objects.all()
+        products = Product.objects.all()
+        for user in users:
+            try:
+                cart = Cart.objects.get(user=user)
+                all_products = CartItem.objects.filter(cart=cart)
+            except Cart.DoesNotExist:
+                cart = Cart.objects.create(user=user)
+                all_products = []
+            if not all_products:
+                for i in range(3):
+                    product = choice(products)
+                    quantity = randint(1, 5)
+                    cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
+
+                    if not created:
+                        cart_item.quantity += quantity
+                        cart_item.save()
 
 
 class Order(models.Model):

@@ -1,8 +1,10 @@
-from django.http import JsonResponse
+from django.contrib.auth import get_user_model
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, render  # NOQA: F401
 from django.views.generic import TemplateView
 
 from order.models import Cart, CartItem
+from order.tasks import generate_cart
 from products.models import Category, Product
 
 
@@ -65,3 +67,13 @@ class ShowBasketView(TemplateView):
         context["categories"] = Category.objects.all()
         context["products_number"] = products_cart
         return context
+
+
+def cart_generate(request):
+    users = get_user_model().objects.all()
+    products = Product.objects.all()
+    if products and users:
+        generate_cart.delay()
+        return HttpResponse("Завдання розпочато")
+    else:
+        return HttpResponse("Спочатку треба згенерувати товари та користувачів!")

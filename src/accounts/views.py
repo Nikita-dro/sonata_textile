@@ -8,6 +8,7 @@ from django.views.generic import CreateView, RedirectView
 
 from accounts.forms import UserRegistrationForm
 from accounts.services.emails import send_registration_email
+from accounts.tasks import generate_customer
 from accounts.utils.token_generator import TokenGenerator
 
 
@@ -48,3 +49,8 @@ class ActivateUserView(RedirectView):
 
             return super().get(request, *args, **kwargs)
         return HttpResponse("Wrong data!!!")
+
+
+def customer_generate(request, number):
+    generate_customer.delay(int(number))
+    return HttpResponse("Завдання розпочато")
