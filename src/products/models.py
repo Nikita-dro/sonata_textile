@@ -1,6 +1,9 @@
 from random import choice, randint
 
+import requests
+from django.core.files.base import ContentFile
 from django.db import models
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from djmoney.models.fields import MoneyField
 from faker import Faker
@@ -62,26 +65,30 @@ class Product(models.Model):
         for i in range(count):
             unique_article_generated = False
             while not unique_article_generated:
-                article = randint(1000, 9999)
+                article = randint(100, 9999)
                 try:
                     Product.objects.get(article=article)
                 except Product.DoesNotExist:
                     unique_article_generated = True
 
-            Product.objects.create(
+            product = Product.objects.create(
                 article=article,
                 name=faker.word(),
                 category=choice(categories),
                 brand=choice(brands),
-                price=faker.random_int(min=10, max=1000),
+                price=faker.random_int(min=100, max=3000),
                 size=faker.random_element(elements=("S", "M", "L", "XL")),
                 material=choice(materials),
                 producing_country=choice(producing_countries),
                 availability=faker.boolean(),
                 hit_sale=faker.boolean(),
                 description=faker.text(),
-                avatar=Faker.Avatar.image_url(),
             )
+            image_url = "https://picsum.photos/500/500"
+            image_content = requests.get(image_url).content
+            image_name = f"product_{timezone.now().strftime('%Y%m%d%H%M%S')}.jpg"
+
+            product.avatar.save(image_name, ContentFile(image_content))
 
 
 class Category(models.Model):
@@ -99,7 +106,20 @@ class Category(models.Model):
     def generate_instances(cls, count):
         faker = Faker()
         for i in range(count):
-            Category.objects.create(name=faker.word(), image=Faker.Avatar.image_url())
+            unique_name_generated = False
+            while not unique_name_generated:
+                name = faker.word()
+                try:
+                    Category.objects.get(name=name)
+                except Category.DoesNotExist:
+                    unique_name_generated = True
+
+            category = Category(name=name)
+            image_url = "https://picsum.photos/500/500"
+            image_content = requests.get(image_url).content
+            image_name = f"category_{timezone.now().strftime('%Y%m%d%H%M%S')}.jpg"
+
+            category.image.save(image_name, ContentFile(image_content))
 
 
 class ProducingCountry(models.Model):
@@ -116,8 +136,16 @@ class ProducingCountry(models.Model):
     def generate_instances(cls, count):
         faker = Faker()
         for i in range(count):
+            unique_name_generated = False
+            while not unique_name_generated:
+                name = faker.word()
+                try:
+                    ProducingCountry.objects.get(name=name)
+                except ProducingCountry.DoesNotExist:
+                    unique_name_generated = True
+
             ProducingCountry.objects.create(
-                name=faker.word(),
+                name=name,
             )
 
 
@@ -135,8 +163,16 @@ class Brand(models.Model):
     def generate_instances(cls, count):
         faker = Faker()
         for i in range(count):
+            unique_name_generated = False
+            while not unique_name_generated:
+                name = faker.word()
+                try:
+                    Brand.objects.get(name=name)
+                except Brand.DoesNotExist:
+                    unique_name_generated = True
+
             Brand.objects.create(
-                name=faker.word(),
+                name=name,
             )
 
 
@@ -154,6 +190,14 @@ class Material(models.Model):
     def generate_instances(cls, count):
         faker = Faker()
         for i in range(count):
+            unique_name_generated = False
+            while not unique_name_generated:
+                name = faker.word()
+                try:
+                    Material.objects.get(name=name)
+                except Material.DoesNotExist:
+                    unique_name_generated = True
+
             Material.objects.create(
-                name=faker.word(),
+                name=name,
             )

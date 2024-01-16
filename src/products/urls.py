@@ -14,5 +14,5 @@ urlpatterns = [
     path("generate-country/<int:number>/", producing_country_generate, name="producing_country_generate"),
     path("generate-brand/<int:number>/", brand_generate, name="brand_generate"),
     path("generate-material/<int:number>/", material_generate, name="material_generate"),
-    path("generate-product/<int:number>/", product_generate, name="product_generate"),
+    path("generate/<int:number>/", product_generate, name="product_generate"),
 ]

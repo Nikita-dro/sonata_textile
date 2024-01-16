@@ -3,7 +3,7 @@ version: '3'
 services:
   backend:
     build: ./
-    container_name: sonata_textile_container
+    container_name: container_sonata_textile
     working_dir: /sonata_textile
     ports:
       - 8010:8000
@@ -30,7 +30,7 @@ services:
 
   pgadmin:
     image: dpage/pgadmin4
-    container_name: pgadmin_container
+    container_name: container_pgadmin
     restart: on-failure
     ports:
       - 5000:80
@@ -76,13 +76,15 @@ services:
 
   celery:
     build: ./
-    container_name: celery_container
+    container_name: container_celery
     command:
       - ./commands/start_celery.sh
     restart: on-failure
     volumes:
       - ./src:/sonata_textile
       - ./commands:/sonata_textile/commands
+      - media_content:/sonata_textile/media
+      - static_content:/sonata_textile/static
     env_file:
       - .env
     depends_on:
@@ -91,7 +93,7 @@ services:
 
   redisadmin:
     image: redislabs/redisinsight
-    container_name: redis_admin
+    container_name: admin_redis
     restart: on-failure
     ports:
       - 8001:8001
@@ -100,7 +102,7 @@ services:
 
   flower:
     build: ./
-    container_name: flower_container
+    container_name: container_flower
     volumes:
       - ./src:/sonata_textile
     env_file:

@@ -63,13 +63,23 @@ class Customer(AbstractBaseUser, PermissionsMixin):
     def generate_instances(cls, count):
         faker = Faker()
         for i in range(count):
-            get_user_model().objects.create(
+            unique_email_generated = False
+            while not unique_email_generated:
+                email = faker.email()
+                try:
+                    Customer.objects.get(email=email)
+                except Customer.DoesNotExist:
+                    unique_email_generated = True
+
+            user = get_user_model().objects.create(
                 first_name=faker.first_name(),
                 last_name=faker.last_name(),
-                email=faker.email(),
+                email=email,
                 phone_number=faker.phone_number(),
                 is_staff=False,
                 is_active=True,
                 date_joined=faker.date_time_this_decade(),
                 birth_date=faker.date_time_between(start_date="-40y", end_date="-18y"),
             )
+            user.set_password("user")
+            user.save()

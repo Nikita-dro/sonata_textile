@@ -30,30 +30,30 @@ else:
     DATABASES = {
         # "default": {
         #     "ENGINE": "django.db.backends.postgresql",
-        #     "NAME": "drobot_sonata_textile",
-        #     "USER": "mykyta",
-        #     "PASSWORD": "admin2323",
+        #     "NAME": "drobot_db",
+        #     "USER": "admin2",
+        #     "PASSWORD": "admin43",
         #     "HOST": "localhost",
         #     "PORT": 5432,
         # },
-        # "default": {
-        #     "ENGINE": "django.db.backends.postgresql",
-        #     "NAME": os.environ.get("POSTGRES_DB"),
-        #     "USER": os.environ.get("POSTGRES_USER"),
-        #     "PASSWORD": os.environ.get("POSTGRES_PASSWORD"),
-        #     "HOST": os.environ.get("POSTGRES_HOST"),
-        #     "PORT": os.environ.get("POSTGRES_PORT"),
-        # },
         "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",  # NOQA
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": os.environ.get("POSTGRES_DB"),
+            "USER": os.environ.get("POSTGRES_USER"),
+            "PASSWORD": os.environ.get("POSTGRES_PASSWORD"),
+            "HOST": os.environ.get("POSTGRES_HOST"),
+            "PORT": os.environ.get("POSTGRES_PORT"),
         },
+        # "default": {
+        #     "ENGINE": "django.db.backends.sqlite3",
+        #     "NAME": BASE_DIR / "db.sqlite3",  # NOQA
+        # },
     }
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
 STATICFILES_DIRS = (BASE_DIR / "static",)  # NOQA
 
 MEDIA_URL = "/media/"
