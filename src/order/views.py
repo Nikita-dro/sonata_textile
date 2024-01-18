@@ -1,8 +1,13 @@
+import json
+
 from django.contrib.auth import get_user_model
+from django.core.mail import send_mail
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import get_object_or_404, render  # NOQA: F401
+from django.shortcuts import get_object_or_404, redirect, render  # NOQA: F401
 from django.views.generic import TemplateView
 
+from config.settings.base import EMAIL_HOST_USER
+from order.forms import OrderForm
 from order.models import Cart, CartItem
 from order.tasks import generate_cart
 from products.models import Category, Product
@@ -77,3 +82,69 @@ def cart_generate(request):
         return HttpResponse("Завдання розпочато")
     else:
         return HttpResponse("Спочатку треба згенерувати товари та користувачів!")
+
+
+def order_view(request):
+    categories = Category.objects.all()
+    user = request.user
+    if request.method == "POST":
+        form = OrderForm(user, request.POST)
+        if form.is_valid():
+            order = form.save(commit=False)
+            if user.social_auth.filter(provider="google-oauth2").exists():
+                if "first_name" in form.cleaned_data:
+                    user.first_name = form.cleaned_data["first_name"]
+                if "last_name" in form.cleaned_data:
+                    user.last_name = form.cleaned_data["last_name"]
+                if "phone_number" in form.cleaned_data:
+                    user.phone_number = form.cleaned_data["phone_number"]
+                user.save()
+            order.user = user
+            cart = Cart.objects.get(user=user)
+            order.cart = json.dumps(
+                {
+                    "items": [
+                        {
+                            "name": item.product.name,
+                            "article": item.product.article,
+                            "quantity": item.quantity,
+                        }
+                        for item in CartItem.objects.filter(cart=cart)
+                    ]
+                },
+                ensure_ascii=False,
+            )
+            order.save()
+            cart_item = CartItem.objects.filter(cart=cart)
+            cart_item_list = []
+            total_price = 0
+            for item in cart_item:
+                cart_item_list.append(f"{item.product.name}({item.product.article}) - {item.quantity} шт.")
+                total_price += item.quantity * item.product.price.amount
+            formatted_list = "\n".join(cart_item_list)
+            send_mail(
+                subject=f"Замовлення №{order.pk}!",
+                message=f"Інформація про покупця:"
+                f"\n\t1) Ім'я - {user.first_name}"
+                f"\n\t2) Прізвище - {user.last_name}"
+                f"\n\t3) Номер телефона - {user.phone_number}\n"
+                f"Інформація про замовлення:"
+                f"\n\t1) Спосіб доставки - {order.get_delivery_method_display()}"
+                f"\n\t2) Спосіб оплати - {order.get_payment_method_display()}"
+                f"\n\t3) Місто - {order.city}"
+                f"\n\t4) Адреса відділення - {order.branch_address}\n"
+                f"Товари:"
+                f"\n{formatted_list}"
+                f"\nДо сплати: {total_price}",
+                from_email=EMAIL_HOST_USER,
+                recipient_list=[
+                    "drobotda598@gmail.com",
+                ],
+                fail_silently=False,
+            )
+            Cart.objects.filter(user=user).delete()
+            return render(request, "orders/order.html", {"form": form, "success_modal": True})
+    else:
+        form = OrderForm(user)
+
+    return render(request, "orders/order.html", {"form": form, "categories": categories})
