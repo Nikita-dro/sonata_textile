@@ -66,8 +66,8 @@ class Order(models.Model):
         CASH = 0, "Оплата при доставці"
         CARD = 1, "Переказ на карту"
 
-    user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
-    cart = models.ForeignKey("Cart", on_delete=models.CASCADE, verbose_name=_("Кошик"))
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    cart = models.TextField(verbose_name=_("Кошик"))
     delivery_method = models.PositiveSmallIntegerField(_("Спосіб доставки"), choices=DELIVERY_CHOICES.choices)
     payment_method = models.PositiveSmallIntegerField(
         _("Спосіб оплати"),
@@ -78,7 +78,7 @@ class Order(models.Model):
     branch_address = models.CharField(_("Адреса відділення"), max_length=255)
 
     def __str__(self):
-        return f"{self.pk} - {self.cart.user}"
+        return f"{self.pk} - {self.user}"
 
 
 class City(models.Model):

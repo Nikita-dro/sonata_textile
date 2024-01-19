@@ -85,3 +85,21 @@ class UserLogin(TemplateView):
 
 class UserLogout(LogoutView):
     ...
+
+
+class ContactsView(TemplateView):
+    template_name = "company/contacts.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["categories"] = Category.objects.all()
+        return context
+
+
+class PartnersView(TemplateView):
+    template_name = "company/partners.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["categories"] = Category.objects.all()
+        return context

@@ -410,8 +410,8 @@
                         компанію</a>
                     <a class="p-2 link-secondary" style="text-decoration: none;" href="{% url 'core:delivery' %}">Доставка
                         й оплата</a>
-                    <a class="p-2 link-secondary" style="text-decoration: none;" href="#">Контакти</a>
-                    <a class="p-2 link-secondary" style="text-decoration: none;" href="#">Наші
+                    <a class="p-2 link-secondary" style="text-decoration: none;" href="{% url 'core:contacts' %}">Контакти</a>
+                    <a class="p-2 link-secondary" style="text-decoration: none;" href="{% url 'core:partners' %}">Наші
                         партнери</a>
                 </div>
                 <div class="nav-right ml-auto" style="margin-top: 5px">
@@ -520,9 +520,9 @@
                         </svg>
                         <span>Кошик</span>&nbsp;<span id="products_total_number">({{ total }})</span>
                     </a>
-                    {% if total != 0 %}
-                        <div class="basket-items d-none">
-                            <ul class="">
+                    <div class="basket-items d-none">
+                        <ul class="">
+                            {% if total != 0 %}
                                 {% for product_basket in products_number %}
                                     <div class="basket_popup__item">
                                         <img class="basket_popup__img" src="{{ product_basket.product.avatar.url }}">
@@ -552,11 +552,15 @@
                                     <div class="total-amount" style="text-align: center;">
                                         Всього: <span id="totalAmount">{{ total_price }}</span> грн
                                     </div>
-                                    <button class="order-button" style="margin-left: 70px; margin-top: 5px;">Оформити замовлення</button>
+                                    <button class="order-button" style="margin-left: 70px; margin-top: 5px;" onclick="window.location.href='{% url 'order:order_view' %}'">Оформити замовлення</button>
                                 </div>
-                            </ul>
-                        </div>
-                    {% endif %}
+                            {% else %}
+                                <div class="empty-basket-message" style="text-align: center; margin-top: 15px; margin-right: 20px;">
+                                    <p>Ваш кошик порожній</p>
+                                </div>
+                            {% endif %}
+                        </ul>
+                    </div>
                 </div>
             {% else %}
                 <div class="col-md-4 d-flex justify-content-end align-items-center">
@@ -621,11 +625,11 @@
                         <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
                             <div class="col p-4 d-flex flex-column position-static">
                                 <h3 class="mb-0" style="margin-top: 20px">Наші партнери</h3>
-                                <div class="mb-1 text-muted">співпрацюємо з 2008 року</div>
+                                <div class="mb-1 text-muted">співпрацюємо з 1994 року</div>
                                 <p class="card-text mb-auto" style="margin-top: 7px">Нашими партнерами є різні
                                     країни.
                                     Вони постачають якісний товар, який сколихує серця!</p>
-                                <a href="#" class="stretched-link mb-3 text-success"
+                                <a href="{% url 'core:partners' %}" class="stretched-link mb-3 text-success"
                                    style="text-decoration: none; font-weight: bold;">Детальніше</a>
                             </div>
                             <div class="col-auto d-none d-lg-block">
@@ -736,10 +740,9 @@
                 <ul style="margin-right: 60px;">
                     <li><a href="{% url 'core:about_us' %}" style="text-decoration: none; color: #e5e5e5">Sonata
                         Textile</a></li>
-                    <li><a href="" style="text-decoration: none; color: #e5e5e5">Конфіденційність</a></li>
                     <li><a href="{% url 'core:delivery' %}" style="text-decoration: none; color: #e5e5e5">Доставка і
                         оплата</a></li>
-                    <li><a href="" style="text-decoration: none; color: #e5e5e5">Наші партнери</a></li>
+                    <li><a href="{% url 'core:partners' %}" style="text-decoration: none; color: #e5e5e5">Наші партнери</a></li>
                 </ul>
             </div>
 
@@ -795,7 +798,7 @@
                                         <path d="M15.5802 12.3435L12.3417 10.1836C11.9307 9.91174 11.3798 10.0012 11.076 10.3892L10.1327 11.6022C10.0114 11.762 9.79107 11.8084 9.61569 11.711L9.43625 11.612C8.8414 11.2878 8.10126 10.8841 6.61001 9.39221C5.11876 7.90033 4.71429 7.15957 4.39006 6.56578L4.29167 6.38632C4.1929 6.21096 4.23839 5.98963 4.39831 5.86742L5.61038 4.92431C5.9982 4.62043 6.08778 4.06966 5.81622 3.65853L3.65654 0.419844C3.37824 0.00118926 2.81989 -0.124489 2.38904 0.134523L1.03484 0.948054C0.609337 1.19822 0.297165 1.60338 0.163778 2.07862C-0.323868 3.85555 0.0429834 6.92225 4.56019 11.4403C8.15353 15.0336 10.8286 16 12.6673 16C13.0904 16.0018 13.5119 15.9467 13.9204 15.8362C14.3957 15.703 14.8009 15.3908 15.0509 14.9651L15.8652 13.6116C16.1246 13.1807 15.999 12.6219 15.5802 12.3435ZM15.4058 13.338L14.5934 14.6923C14.4139 14.9996 14.1224 15.2255 13.7801 15.3227C12.1399 15.7731 9.27415 15.4 4.93745 11.063C0.600745 6.72601 0.227769 3.86036 0.678108 2.21971C0.775469 1.87698 1.00162 1.58516 1.3092 1.40536L2.66341 0.592894C2.85035 0.480402 3.09269 0.534929 3.21345 0.716603L4.38662 2.47806L5.37129 3.95501C5.48921 4.13334 5.45047 4.37235 5.28224 4.50431L4.06989 5.44743C3.70094 5.72956 3.59558 6.24005 3.82274 6.64521L3.919 6.82013C4.25977 7.44515 4.68342 8.22268 6.23013 9.76925C7.77684 11.3158 8.55407 11.7395 9.17876 12.0803L9.35392 12.1768C9.75902 12.4039 10.2695 12.2986 10.5516 11.9296L11.4947 10.7172C11.6266 10.549 11.8655 10.5103 12.0439 10.6281L15.2821 12.788C15.4639 12.9086 15.5184 13.1511 15.4058 13.338Z"
                                               fill="white"></path>
                                     </svg>
-                                    <span style="margin-bottom: 5px; margin-left: 8px">+38 (066) 927-49-98</span>
+                                    <span style="margin-bottom: 5px; margin-left: 8px">+38 (095) 451-56-12</span>
                                 </a>
                             </li>
                         </ul>
@@ -885,9 +888,10 @@
                             itemHtml += '</div>';
                             $(".basket-items ul").append(itemHtml);
                         });
+                        var OrderUrl = "{% url 'order:order_view' %}";
                         var summaryBarHtml = '<div class="summary-bar d-none">';
                         summaryBarHtml += '<div class="total-amount" style="text-align: center;">Всього: <span id="totalAmount">' + data.products_total_price + '</span> грн</div>';
-                        summaryBarHtml += '<button class="order-button" style="margin-left: 70px; margin-top: 5px;">Оформити замовлення</button>';
+                        summaryBarHtml += '<button class="order-button" style="margin-left: 70px; margin-top: 5px;" onclick="window.location.href=\'' + OrderUrl + '\'">Оформити замовлення</button>';
                         summaryBarHtml += '</div>';
 
                         $(".basket-items ul").append(summaryBarHtml);
