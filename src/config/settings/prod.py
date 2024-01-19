@@ -31,3 +31,13 @@ STATIC_ROOT = BASE_DIR / "static"  # NOQA
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"  # NOQA
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_USE_TLS = True
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_HOST_USER = "hillel416@gmail.com"
+EMAIL_HOST_PASSWORD = "cxcwodrtvrokwcgq"
+EMAIL_PORT = 587
+EMAIL_FAIL_SILENTLY = False
+
+REGISTRATION_EMAIL_SUBJECT = "Email для реєстрації на сайті Sonata Textile"
