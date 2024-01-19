@@ -1,0 +1,308 @@
+{% extends "index.html" %}
+{% csrf_token %}
+{% block content %}
+    <style>
+        .basket_popup__item_1 {
+            border: 1px solid rgba(150, 150, 150, .4);
+            margin-bottom: 30px;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        .basket_popup__img_1 {
+            width: 80px;
+            height: 80px;
+            margin-right: 10px;
+        }
+
+        .basket_popup__info_1 {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .goods__title_1 {
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: black;
+        }
+
+        .basket_popup__art_1 {
+            margin-bottom: 5px;
+        }
+
+        .basket_popup__quantity_1 {
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            margin-right: auto;
+            margin-left: 500px;
+        }
+
+        .basket__quantity-buttons_1 {
+            display: flex;
+            align-items: center;
+            margin-right: 10px;
+        }
+
+        .quantity-btn {
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            padding: 8px 12px;
+            font-size: 16px;
+            margin: 0 6px;
+            transition: background-color 0.3s ease;
+            position: relative;
+        }
+
+        .quantity-value_1 {
+            margin: 0 10px;
+            font-size: 16px;
+        }
+
+        .basket_popup__sum {
+            font-weight: bold;
+            color: #009688;
+            margin-left: auto;
+            margin-right: 10px;
+        }
+
+        .delete-btn {
+            background-color: #ff6d4a;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            padding: 5px;
+            margin-left: auto;
+            position: relative;
+            top: -45px;
+        }
+
+        .summary-bar_1 {
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+            border-top: 1px solid #ccc;
+            padding: 10px;
+            box-shadow: 0px -4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .total-amount_1 {
+            text-align: center;
+        }
+
+        .order-button_1 {
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: background-color 0.3s ease;
+        }
+
+        .order-button_1:hover {
+            background-color: #ff6d4a;
+        }
+    </style>
+
+    <h1 style="text-align: center; margin-bottom: 25px; margin-top: 25px;">Кошик</h1>
+    {% if total != 0 %}
+        <div class="basket-item">
+            <ul class="" style="list-style-type: none;">
+                {% for product_basket in products_number %}
+                    <li>
+                        <div class="basket_popup__item_1">
+                            <img class="basket_popup__img_1" src="{{ product_basket.product.avatar.url }}">
+                            <div class="basket_popup__info_1">
+                                <div class="basket__col">
+                                    <div class="basket__top">
+                                        <div class="basket_popup__art_1">
+                                            Артикул:&nbsp;<span>{{ product_basket.product.article }}</span></div>
+                                        <div class="goods__title_1">
+                                            <a href="{% url 'products:product_info' product_basket.product.id %}"
+                                               style="text-decoration: none; color: black">{{ product_basket.product.name }}</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="basket__col">
+                                    <div class="basket_popup__quantity_1">
+                                        <div class="basket__quantity-buttons_1">
+                                            <button class="quantity-btn" data-action="-"
+                                                    data-product_id="{{ product_basket.product.id }}">-
+                                            </button>
+                                            <span class="quantity-value_1">{{ product_basket.quantity }}</span>
+                                            <button class="quantity-btn" data-action="+"
+                                                    data-product_id="{{ product_basket.product.id }}">+
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="basket__col">
+                                    <div class="basket_popup__sum"
+                                         style="margin-top: -30px;">{{ product_basket.product.price.amount }}&nbsp;<span>грн</span>
+                                    </div>
+                                </div>
+                                <button class="delete-btn" data-product_id="{{ product_basket.product.id }}">Видалити
+                                </button>
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
+                <div class="summary-bar_1">
+                    <div class="total-amount_1" style="text-align: center;">
+                        Всього: <span id="totalAmount">{{ total_price }}</span> грн
+                    </div>
+                    <a href="{% url 'order:order_view' %}" class="order-button_1"
+                       style="margin-left: 70px; margin-top: 5px; text-decoration: none;">Оформити замовлення</a>
+                </div>
+            </ul>
+        </div>
+    {% else %}
+        <div class="empty-basket-message" style="text-align: center; margin-top: 150px; margin-bottom: 150px">
+            <p style="font-size: 2.25rem;">Ваш кошик порожній</p>
+        </div>
+    {% endif %}
+
+    <script>
+        $(document).ready(function () {
+
+            function basketUpdating(update_quantity) {
+                var product_id = $(this).data("product_id");
+                var data = {};
+                data.product_id = product_id;
+                data.update_quantity = update_quantity;
+                data.basket = 'false';
+                var csrf_token = $("[name='csrfmiddlewaretoken']").val();
+                data["csrfmiddlewaretoken"] = csrf_token;
+                var url = '{% url 'order:add_to_cart' %}';
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data: data,
+                    cache: true,
+                    success: function (data) {
+                        $(".basket-item ul").html("");
+                        if (data.products_number === 0) {
+                            var itemHtml = '<div class="empty-basket-message" style="text-align: center; margin-top: 150px; margin-bottom: 150px">';
+                            itemHtml += '<p style="font-size: 2.25rem;">Ваш кошик порожній</p>';
+                            itemHtml += '</div>';
+                            $(".basket-item ul").append(itemHtml);
+                        } else {
+                            $.each(data.products_list, function (key, val) {
+                                var productUrl = "{% url 'products:product_info' pk=0 %}".replace('0', val.id_product);
+                                var itemHtml = '<li>'
+                                itemHtml += '<div class="basket_popup__item_1">';
+                                itemHtml += '<img class="basket_popup__img_1" src="' + val.image_product + '">';
+                                itemHtml += '<div class="basket_popup__info_1">';
+                                itemHtml += '<div class="basket__col">';
+                                itemHtml += '<div class="basket__top">';
+                                itemHtml += '<div class="basket_popup__art_1">Артикул:&nbsp;<span>' + val.article + '</span></div>';
+                                itemHtml += '<div class="goods__title_1">';
+                                itemHtml += '<a href="' + productUrl + '"style="text-decoration: none; color: black;">' + val.name_product + '</a>';
+                                itemHtml += '</div>';
+                                itemHtml += '</div>';
+                                itemHtml += '</div>';
+                                itemHtml += '<div class="basket__col">';
+                                itemHtml += '<div class="basket_popup__quantity_1">';
+                                itemHtml += '<div class="basket__quantity-buttons_1">';
+                                itemHtml += '<button class="quantity-btn" data-action="-" data-product_id="' + val.id_product + '">-</button>';
+                                itemHtml += '<span class="quantity-value_1">' + val.quantity + '</span>';
+                                itemHtml += '<button class="quantity-btn" data-action="+" data-product_id="' + val.id_product + '">+</button>';
+                                itemHtml += '</div>';
+                                itemHtml += '</div>';
+                                itemHtml += '<div class="basket__col">';
+                                itemHtml += '<div class="basket_popup__sum" style="margin-top: -30px;">' + val.price_product + '&nbsp;<span>грн</span></div>';
+                                itemHtml += '</div>';
+                                itemHtml += '</div>';
+                                itemHtml += '<button class="delete-btn" data-product_id="' + val.id_product + '">Видалити</button>'
+                                itemHtml += '</div>';
+                                itemHtml += '</div>';
+                                itemHtml += '</li>';
+                                $(".basket-item ul").append(itemHtml);
+                            });
+                            var OrderUrl = "{% url 'order:order_view' %}";
+                            var summaryBarHtml = '<div class="summary-bar_1 d-none">';
+                            summaryBarHtml += '<div class="total-amount" style="text-align: center;">Всього: <span id="totalAmount">' + data.products_total_price + '</span> грн</div>';
+                            summaryBarHtml += '<button class="order-button" style="margin-left: 70px; margin-top: 5px;" onclick="window.location.href=\'' + OrderUrl + '\'">Оформити замовлення</button>';
+                            summaryBarHtml += '</div>';
+                            $(".basket-item ul").append(summaryBarHtml);
+                            $(".summary-bar_1").removeClass("d-none");
+                        }
+
+                        if (data.products_number || data.products_number === 0) {
+                            $('#products_total_number').text("(" + data.products_number + ")");
+                            $(".basket-items ul").html("");
+                            if (data.products_number === 0) {
+                                var itemHtml = '<div class="basket_none" style="text-align: center; margin-top: 15px; margin-right: 20px;">';
+                                itemHtml += '<p>Ваш кошик порожній</p>';
+                                itemHtml += '</div>';
+                                $(".basket-items ul").append(itemHtml);
+                            } else {
+                                $.each(data.products_list, function (key, val) {
+                                    var productUrl = "{% url 'products:product_info' pk=0 %}".replace('0', val.id_product);
+                                    var itemHtml = '<div class="basket_popup__item">';
+                                    itemHtml += '<img class="basket_popup__img" src="' + val.image_product + '">';
+                                    itemHtml += '<div class="basket_popup__info">';
+                                    itemHtml += '<div class="basket__col">';
+                                    itemHtml += '<div class="basket__top">';
+                                    itemHtml += '<div class="basket_popup__art">Артикул:&nbsp;<span>' + val.article + '</span></div>';
+                                    itemHtml += '<div class="goods__title">';
+                                    itemHtml += '<a href="' + productUrl + '"style="text-decoration: none; color: black;">' + val.name_product + '</a>';
+                                    itemHtml += '</div>';
+                                    itemHtml += '</div>';
+                                    itemHtml += '</div>';
+                                    itemHtml += '<div class="basket__col">';
+                                    itemHtml += '<div class="basket_popup__quantity">Кількість:&nbsp;<span>' + val.quantity + '</span></div>';
+                                    itemHtml += '</div>';
+                                    itemHtml += '<div class="basket__col">';
+                                    itemHtml += '<div class="basket_popup__sum">' + val.price_product + '&nbsp;<span>грн</span></div>';
+                                    itemHtml += '</div>';
+                                    itemHtml += '</div>';
+                                    itemHtml += '</div>';
+                                    $(".basket-items ul").append(itemHtml);
+                                });
+                                var OrderUrl = "{% url 'order:order_view' %}";
+                                var summaryBar = '<div class="summary-bar d-none">';
+                                summaryBar += '<div class="total-amount" style="text-align: center;">Всього: <span id="totalAmount">' + data.products_total_price + '</span> грн</div>';
+                                summaryBar += '<button class="order-button" style="margin-left: 70px; margin-top: 5px;" onclick="window.location.href=\'' + OrderUrl + '\'">Оформити замовлення</button>';
+                                summaryBar += '</div>';
+
+                                $(".basket-items ul").append(summaryBar);
+                                $(".summary-bar").removeClass("d-none");
+                            }
+                        }
+                    },
+                    error: function () {
+                        console.log('error');
+                    }
+                })
+            }
+
+            $(".basket-item ul").on('click', '.delete-btn', function () {
+                basketUpdating.call(this, '');
+            });
+
+            $(".basket-item ul").on('click', '.quantity-btn', function () {
+                var update_action = $(this).data("action");
+                if (update_action === '+') {
+                    basketUpdating.call(this, 'true');
+                } else {
+                    basketUpdating.call(this, 'false');
+                }
+            });
+        })
+    </script>
+
+{% endblock content %}

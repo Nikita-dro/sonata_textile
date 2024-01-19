@@ -1,0 +1,64 @@
+{% extends "index.html" %}
+{% block content %}
+    {% if products %}
+        <h1 style="text-align: center; margin-bottom: 25px; margin-top: 25px;">Результати пошуку</h1>
+        <div class="row">
+            {% for product in products %}
+                <div class="col-md-4 mb-3" style="width: 25%;">
+                    <a href="{% url 'products:product_info' product.id %}" style="text-decoration: none;">
+                        <div class="card" style="width: 93%;">
+                            <img src="{{ product.avatar.url }}" class="card-img-top" alt="dfgdfg"
+                                 style="width: 100%; height: 270px; object-fit: cover;">
+                            <div class="card-body">
+                                <h5 class="card-title"
+                                    style="font-weight: bold; font-size: 1.20rem; color: black;">{{ product.name }}</h5>
+                                <p class="card-text"
+                                   style="margin-bottom: 5px; font-style: italic; color: black;">
+                                    Артикул: {{ product.article }}</p>
+                                <p class="card-text"
+                                   style="margin-bottom: 5px; font-style: italic; color: black;">
+                                    Ціна: {{ product.price.amount }} грн</p>
+                                <p class="card-text" style="font-style: italic; color: black;">
+                                    Розмір: {{ product.size }}</p>
+                                {% if product.availability == True %}
+                                    {% if user.is_authenticated %}
+                                        <div class="d-flex justify-content-center">
+                                            <a id="addToCartBtn"
+                                               class="btn btn-outline-secondary add-to-cart-btn"
+                                               data-product_id="{{ product.id }}"
+                                               data-name="{{ product.name }}"
+                                               data-price="{{ product.price.amount }}"
+                                               style="margin-top: 10px;"
+                                            >Додати
+                                                в кошик</a>
+                                            <div id="addedText" class="green-line">Додано в кошик</div>
+                                        </div>
+                                    {% else %}
+                                        <div class="d-flex justify-content-center">
+                                            <a href="{% url 'core:login' %}"
+                                               class="btn btn-outline-secondary "
+                                               style="margin-top: 10px;"
+                                            >Додати
+                                                в кошик</a>
+                                        </div>
+                                    {% endif %}
+                                {% else %}
+                                    <p class="card-text"
+                                       style="font-weight: bold; color: red; text-align: center; margin-bottom: 13px;">
+                                        Немає в
+                                        наявності</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                {% if forloop.counter|divisibleby:4 and not forloop.last %}
+                    </div>
+                    <div class="row">
+                {% endif %}
+            {% endfor %}
+            </div>
+    {% else %}
+        <h1 style="text-align: center; margin-bottom: 25px; margin-top: 25px;">Таких товарів немає</h1>
+    {% endif %}
+{% endblock content %}

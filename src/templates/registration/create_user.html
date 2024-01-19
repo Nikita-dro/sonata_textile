@@ -1,0 +1,127 @@
+{% extends "index.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <style>
+        .log-in__form-outer {
+            padding: 20px;
+            border: 2px solid #3498db;
+            border-radius: 10px;
+            max-width: 400px;
+            margin: auto;
+        }
+
+        .logo img {
+            display: block;
+            margin: 0 auto 20px;
+        }
+
+        .login-form__title {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-action button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #2ecc71;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .login-form__form-bottom a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        .sso {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #3498db;
+        }
+
+        .sso__link {
+            display: block;
+            margin-bottom: 10px;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #fff;
+            border: 1px solid #3498db;
+            border-radius: 5px;
+            text-decoration: none;
+            color: #3498db;
+        }
+
+        .sso__link svg {
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+
+        .form-item label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .form-item input {
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .error-text {
+            color: #e74c3c;
+            font-size: 0.9em;
+            margin-top: 5px;
+            display: block;
+        }
+    </style>
+    <div class="log-in__form-outer" style="margin-top: 40px; margin-bottom: 40px;">
+        <div class="logo">
+            <img src="{% static 'img/textile_logo.jpg' %}" width="170" height="120" alt="">
+        </div>
+        <h2 class="login-form__title">Реєстрація</h2>
+        <form method="post">
+            {% csrf_token %}
+            {% if form.non_field_errors %}
+                <div class="error-text">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+            {% for field in form %}
+                <div class="form-item">
+                    <label for="{{ field.id_for_label }}" style="margin-top: 10px;">{{ field.label }}</label>
+                    {{ field }}
+                </div>
+            {% endfor %}
+            <div class="form-action" style="margin-top: 20px;">
+                <button type="submit">Зареєструватися</button>
+            </div>
+        </form>
+        <div class="sso">
+            <div class="sso__title">Зареєструватися за допомогою Google</div>
+            <a class="sso__link sso__link_google" href="{% url 'social:begin' 'google-oauth2' %}">
+                <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5.15625 11.0005C5.15625 9.91054 5.45656 8.88947 5.97828 8.01519V4.30664H2.26974C0.797844 6.21823 0 8.54796 0 11.0005C0 13.4531 0.797844 15.7828 2.26974 17.6944H5.97828V13.9859C5.45656 13.1116 5.15625 12.0905 5.15625 11.0005Z"
+                          fill="#FBBD00"></path>
+                    <path d="M11 16.8435L8.42188 19.4216L11 21.9997C13.4526 21.9997 15.7823 21.2019 17.6939 19.73V16.0254H13.9893C13.1074 16.549 12.082 16.8435 11 16.8435Z"
+                          fill="#0F9D58"></path>
+                    <path d="M5.97808 13.9863L2.26953 17.6949C2.56095 18.0733 2.87827 18.4358 3.22163 18.7792C5.29926 20.8568 8.06159 22.001 10.9998 22.001V16.8447C8.86751 16.8447 6.99867 15.6966 5.97808 13.9863Z"
+                          fill="#31AA52"></path>
+                    <path d="M22 10.9997C22 10.3305 21.9394 9.66003 21.8199 9.00699L21.7232 8.47852H11V13.6348H16.2186C15.7119 14.6429 14.9327 15.4653 13.9892 16.0255L17.6938 19.7301C18.0723 19.4386 18.4348 19.1213 18.7782 18.778C20.8558 16.7003 22 13.938 22 10.9997Z"
+                          fill="#3C79E6"></path>
+                    <path d="M15.1322 6.86782L15.5879 7.32355L19.2339 3.67757L18.7782 3.22184C16.7006 1.14421 13.9382 0 11 0L8.42188 2.57812L11 5.15625C12.5609 5.15625 14.0284 5.76409 15.1322 6.86782Z"
+                          fill="#CF2D48"></path>
+                    <path d="M10.9998 5.15625V0C8.06163 0 5.2993 1.14421 3.22163 3.2218C2.87827 3.56516 2.56095 3.9276 2.26953 4.30611L5.97808 8.01466C6.99871 6.30437 8.86756 5.15625 10.9998 5.15625Z"
+                          fill="#EB4132"></path>
+                </svg>
+                <span>Google</span>
+            </a>
+            <p class="login-form__form-bottom">Вже є акаунт? <a href="{% url 'core:login' %}">Увійти</a></p>
+        </div>
+    </div>
+{% endblock content %}
