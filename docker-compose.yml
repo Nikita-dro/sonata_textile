@@ -16,41 +16,41 @@ services:
       - ./commands/start_server_${MODE}.sh
     env_file:
       - .env
-    depends_on:
-      - postgres
-
-  postgres:
-    image: postgres:16.1
-    ports:
-      - 5432:5432
-    volumes:
-      - pg_data:/var/lib/postgresql/data
-    env_file:
-      - .env
-
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: container_pgadmin
-    restart: on-failure
-    ports:
-      - 5000:80
-    volumes:
-      - pgadmin_data:/var/lib/pgadmin
-    env_file:
-      - .env
-    depends_on:
-      - postgres
-
-#  mongodb:
-#    image: mongo:3-stretch
-#    container_name: mongo_container
-#    restart: on-failure
-#    ports:
-#      - 27017:27017
-#    env_file:
-#      - .env
-#    volumes:
-#      - ./mongo_data:/data/db
+  #    depends_on:
+  #      - postgres
+  #
+  #  postgres:
+  #    image: postgres:16.1
+  #    ports:
+  #      - 5432:5432
+  #    volumes:
+  #      - pg_data:/var/lib/postgresql/data
+  #    env_file:
+  #      - .env
+  #
+  #  pgadmin:
+  #    image: dpage/pgadmin4
+  #    container_name: container_pgadmin
+  #    restart: on-failure
+  #    ports:
+  #      - 5000:80
+  #    volumes:
+  #      - pgadmin_data:/var/lib/pgadmin
+  #    env_file:
+  #      - .env
+  #    depends_on:
+  #      - postgres
+  #
+  #  mongodb:
+  #    image: mongo:3-stretch
+  #    container_name: mongo_container
+  #    restart: on-failure
+  #    ports:
+  #      - 27017:27017
+  #    env_file:
+  #      - .env
+  #    volumes:
+  #      - ./mongo_data:/data/db
 
   nginx:
     image: nginx:1.19
@@ -66,56 +66,56 @@ services:
     depends_on:
       - backend
 
-  redis:
-    image: redis
-    env_file:
-      - .env
-    restart: on-failure
-    depends_on:
-      - backend
-
-  celery:
-    build: ./
-    container_name: container_celery
-    command:
-      - ./commands/start_celery.sh
-    restart: on-failure
-    volumes:
-      - ./src:/sonata_textile
-      - ./commands:/sonata_textile/commands
-      - media_content:/sonata_textile/media
-      - static_content:/sonata_textile/static
-    env_file:
-      - .env
-    depends_on:
-      - redis
-      - backend
-
-  redisadmin:
-    image: redislabs/redisinsight
-    container_name: admin_redis
-    restart: on-failure
-    ports:
-      - 8001:8001
-    env_file:
-      - .env
-
-  flower:
-    build: ./
-    container_name: container_flower
-    volumes:
-      - ./src:/sonata_textile
-    env_file:
-      - .env
-    command: celery -A config flower --broker=redis://redis
-    ports:
-      - 5555:5555
-    depends_on:
-      - celery
+#  redis:
+#    image: redis
+#    env_file:
+#      - .env
+#    restart: on-failure
+#    depends_on:
+#      - backend
+#
+#  celery:
+#    build: ./
+#    container_name: container_celery
+#    command:
+#      - ./commands/start_celery.sh
+#    restart: on-failure
+#    volumes:
+#      - ./src:/sonata_textile
+#      - ./commands:/sonata_textile/commands
+#      - media_content:/sonata_textile/media
+#      - static_content:/sonata_textile/static
+#    env_file:
+#      - .env
+#    depends_on:
+#      - redis
+#      - backend
+#
+#  redisadmin:
+#    image: redislabs/redisinsight
+#    container_name: admin_redis
+#    restart: on-failure
+#    ports:
+#      - 8001:8001
+#    env_file:
+#      - .env
+#
+#  flower:
+#    build: ./
+#    container_name: container_flower
+#    volumes:
+#      - ./src:/sonata_textile
+#    env_file:
+#      - .env
+#    command: celery -A config flower --broker=redis://redis
+#    ports:
+#      - 5555:5555
+#    depends_on:
+#      - celery
 
 volumes:
   static_content: { }
   media_content: { }
-  pg_data: { }
-  pgadmin_data: { }
+#  pg_data: { }
+#  pgadmin_data: { }
 #  mongo_data: { }

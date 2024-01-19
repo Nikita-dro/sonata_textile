@@ -1,15 +1,8 @@
 from django.urls import path
 
-from core.views import (
-    AboutUsView,
-    AllCategoriesView,
-    DeliveryView,
-    IndexView,
-    UserLogin,
-    UserLogout,
-    ContactsView,
-    PartnersView,
-)
+from core.views import (AboutUsView, AllCategoriesView, ContactsView,
+                        DeliveryView, IndexView, PartnersView, UserLogin,
+                        UserLogout)
 
 app_name = "core"
 urlpatterns = [
