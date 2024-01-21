@@ -270,6 +270,7 @@
                                     itemHtml += '<div class="basket_popup__sum">' + val.price_product + '&nbsp;<span>грн</span></div>';
                                     itemHtml += '</div>';
                                     itemHtml += '</div>';
+                                    itemHtml += '<a href="" class="delete-item" style="margin-top: 55px; text-decoration: none; color: black" data-product_id="' + val.id_product + '">✖</a>';
                                     itemHtml += '</div>';
                                     $(".basket-items ul").append(itemHtml);
                                 });
@@ -291,6 +292,11 @@
             }
 
             $(".basket-item ul").on('click', '.delete-btn', function () {
+                basketUpdating.call(this, '');
+            });
+
+            $(".basket-items").on('click', '.delete-item', function (event) {
+                event.preventDefault();
                 basketUpdating.call(this, '');
             });
 
